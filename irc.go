@@ -8,26 +8,39 @@ import (
 
 var handlers []func(string)
 
-func connectToIrc(server string, channels []string) error {
-	fmt.Println("connecting to ", server)
-	bot := irc.IRC("monobot", "monofuel")
+//IrcBot wrapper around all the bot work for a single irc server
+type IrcBot struct {
+	irc.Connection
+	Channels []string
+	server   string
+}
 
-	bot.AddCallback("PRIVMSG", func(event *irc.Event) {
-		fmt.Println("-----------------------")
-		fmt.Println("MSG: ", event.Message)
-		fmt.Println("NICK: ", event.Nick)
-		fmt.Println("ARGS: ", event.Arguments)
+func connectToIrc(server string, channels []string) (*IrcBot, error) {
+	fmt.Println("connecting to ", server)
+	info, err := getInfo()
+	if err != nil {
+		return nil, err
+	}
+
+	bot := irc.IRC(info.BotName, info.Owner)
+
+	bot.AddCallback("PRIVMSG", func(e *irc.Event) {
+		fmt.Println(e)
+	})
+	bot.AddCallback("001", func(e *irc.Event) {
+		for _, channel := range channels {
+			fmt.Println("joining", channel)
+			bot.Join(channel)
+		}
+	})
+	bot.AddCallback("JOIN", func(e *irc.Event) {
+		fmt.Println(e)
+		bot.Privmsg(e.Arguments[0], "hello world")
 	})
 
 	if err := bot.Connect(server); err != nil {
-		return err
+		return nil, err
 	}
 
-	for _, channel := range channels {
-		fmt.Println("joining", channel)
-		bot.Join(channel)
-		bot.Privmsg(channel, "hello world")
-	}
-
-	return nil
+	return &IrcBot{*bot, channels, server}, nil
 }
