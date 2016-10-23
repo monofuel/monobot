@@ -38,13 +38,15 @@ func main() {
 }
 
 func startIrcBot() {
-	bot, err := connectToIrc("japura.net:6667", []string{"#monobot"})
-	if err != nil {
-		fmt.Printf("Error connecting to irc server: %s\n", err.Error())
-	}
-	bot.CommandCallback = handlers.HandleCommand
+	for _, server := range Settings.IrcServers {
+		bot, err := connectToIrc(server, []string{"#bots"})
+		if err != nil {
+			fmt.Printf("Error connecting to irc server: %s\n", err.Error())
+		}
+		bot.CommandCallback = handlers.HandleCommand
 
-	go bot.Loop()
+		go bot.Loop()
+	}
 }
 
 func startDiscordBot() {
@@ -52,6 +54,7 @@ func startDiscordBot() {
 	discordBot, err := connectToDiscord()
 	if err != nil {
 		fmt.Println(err.Error())
+		return
 	}
 	discordBot.CommandCallback = handlers.HandleCommand
 }
