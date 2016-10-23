@@ -1,16 +1,31 @@
 package handlers
 
-import "strings"
+import (
+	"fmt"
+	"os"
+)
 
-var commandMap = make(map[string]func(string) string)
+var commandMap = make(map[string]func([]string) string)
 
 func init() {
 	commandMap["randomLink"] = randLink
+	commandMap["threest"] = toDo
+
+	commandMap["quit"] = quit
+}
+
+//SetHandler manually sets an external handler
+func SetHandler(key string, f func([]string) string) {
+
+	_, ok := commandMap[key]
+	if ok {
+		fmt.Println("overriding handler:", key)
+	}
+	commandMap[key] = f
 }
 
 //HandleCommand handle a specified command line and return the output
-func HandleCommand(line string) string {
-	args := strings.Fields(line)
+func HandleCommand(args []string) string {
 	if len(args) == 0 {
 		return "refer to help"
 	}
@@ -18,5 +33,15 @@ func HandleCommand(line string) string {
 	if !ok {
 		return "no such command"
 	}
-	return f(line)
+	return f(args)
+}
+
+func toDo(line []string) string {
+	return "not implemented"
+}
+
+func quit(line []string) string {
+	fmt.Println("ordered to quit")
+	os.Exit(-1)
+	return ""
 }

@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"log"
-	"time"
 	"math/rand"
+	"os"
+	"time"
+
 	"github.com/monofuel/monobot/handlers"
 )
 
@@ -18,15 +19,41 @@ func main() {
 	fmt.Println("hello world")
 	err := loadConfig()
 	if err != nil {
-		log.Fatalf("failed to load config: %s\n",err.Error())
+		log.Fatalf("failed to load config: %s\n", err.Error())
 	}
+
+	handlers.SetHandler("info", func(args []string) string {
+		info, err := getInfo()
+		if err != nil {
+			return err.Error()
+		}
+		return fmt.Sprintf("Host: %s\nBotName: %s\nOwner: %s\nPID: %d",
+			info.Hostname, info.BotName, info.Owner, info.PID)
+	})
+
+	startIrcBot()
+	startDiscordBot()
+
+	<-c //never quit (for now)
+}
+
+func startIrcBot() {
 	bot, err := connectToIrc("japura.net:6667", []string{"#monobot"})
 	if err != nil {
 		fmt.Printf("Error connecting to irc server: %s\n", err.Error())
 	}
-	//ongoing work
+	bot.CommandCallback = handlers.HandleCommand
+
 	go bot.Loop()
-	<-c //never quit (for now)
+}
+
+func startDiscordBot() {
+
+	discordBot, err := connectToDiscord()
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	discordBot.CommandCallback = handlers.HandleCommand
 }
 
 //BotInfo is a struct detailing into about the runtime
@@ -34,7 +61,7 @@ type BotInfo struct {
 	Hostname string
 	PID      int
 	BotName  string
-	Owner string
+	Owner    string
 }
 
 func getInfo() (*BotInfo, error) {

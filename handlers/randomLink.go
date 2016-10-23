@@ -7,6 +7,6 @@ var randomLinks = []string{
 	"https://youtu.be/w4WrnNRkYE8",
 }
 
-func randLink() string {
+func randLink(args []string) string {
 	return randomLinks[rand.Intn(len(randomLinks))]
 }
