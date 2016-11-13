@@ -21,11 +21,15 @@ type SettingOptions struct {
 var ConfigFilename = "config.json"
 
 //Settings is the object detailing the loaded configuration
-var Settings = SettingOptions{
+var Settings = &SettingOptions{
 	IrcServers:   []string{"japura.net:6667"},
 	Owner:        "monofuel",
 	IrcPrefix:    "$mono",
 	DiscordToken: "",
+}
+
+func Configuration(s *SettingOptions) {
+	Settings = s
 }
 
 func loadConfig() error {
