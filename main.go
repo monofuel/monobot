@@ -1,4 +1,4 @@
-package main
+package monobot
 
 import (
 	"fmt"
@@ -8,14 +8,14 @@ import (
 	"time"
 
 	"github.com/monofuel/monobot/handlers"
+	"github.com/monofuel/monobullet"
 )
 
 func init() {
 	rand.Seed(time.Now().Unix())
 }
 
-func main() {
-	c := make(chan int)
+func Start() {
 	fmt.Println("hello world")
 	err := loadConfig()
 	if err != nil {
@@ -33,8 +33,26 @@ func main() {
 
 	startIrcBot()
 	startDiscordBot()
+	startPushbulletBot()
+}
 
-	<-c //never quit (for now)
+func startPushbulletBot() error {
+	if Settings.PushbulletAPIKey == "" {
+		return nil
+	}
+	info, err := getInfo()
+	if err != nil {
+		return err
+	}
+	config := &monobullet.Config{
+		ApiKey:     Settings.PushbulletAPIKey,
+		Realtime:   true,
+		DeviceName: info.BotName,
+	}
+
+	monobullet.Configuration(config)
+	monobullet.Start()
+	return nil
 }
 
 func startIrcBot() {

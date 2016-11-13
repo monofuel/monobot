@@ -1,4 +1,4 @@
-package main
+package monobot
 
 import (
 	"encoding/json"
@@ -10,10 +10,11 @@ import (
 
 //SettingOptions is the struct that controls what the config file looks like
 type SettingOptions struct {
-	IrcServers   []string `json:"ircServers"`
-	Owner        string   `json:"owner"`
-	IrcPrefix    string   `json:"ircPrefix"`
-	DiscordToken string   `json:"discordToken"`
+	IrcServers       []string `json:"ircServers"`
+	Owner            string   `json:"owner"`
+	IrcPrefix        string   `json:"ircPrefix"`
+	DiscordToken     string   `json:"discordToken"`
+	PushbulletAPIKey string   `json:"pushbulletAPIKey"`
 }
 
 //ConfigFilename is the name of the configuration file

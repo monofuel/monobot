@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
 var commandMap = make(map[string]func([]string) string)
@@ -10,6 +11,7 @@ var commandMap = make(map[string]func([]string) string)
 func init() {
 	commandMap["randomLink"] = randLink
 	commandMap["threest"] = toDo
+	commandMap["help"] = help
 
 	commandMap["quit"] = quit
 }
@@ -34,6 +36,15 @@ func HandleCommand(args []string) string {
 		return "no such command"
 	}
 	return f(args)
+}
+
+func help(line []string) string {
+	//list commands
+	var output []string
+	for key, _ := range commandMap {
+		output = append(output, key)
+	}
+	return strings.Join(output, ",")
 }
 
 func toDo(line []string) string {
