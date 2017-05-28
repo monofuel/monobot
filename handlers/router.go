@@ -12,6 +12,7 @@ func init() {
 	commandMap["randomLink"] = randLink
 	commandMap["threest"] = toDo
 	commandMap["help"] = help
+	commandMap["ping"] = ping
 
 	commandMap["quit"] = quit
 }
