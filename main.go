@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/monofuel/monobot/handlers"
-	"github.com/monofuel/monobullet"
 )
 
 func init() {
@@ -36,23 +35,17 @@ func Start() {
 	startPushbulletBot()
 }
 
-func startPushbulletBot() error {
+func startPushbulletBot() {
 	if Settings.PushbulletAPIKey == "" {
-		return nil
+		return
 	}
-	info, err := getInfo()
+	pushBot, err := connectToPushbullet()
 	if err != nil {
-		return err
+		fmt.Println(err.Error())
+		return
 	}
-	config := &monobullet.Config{
-		ApiKey:     Settings.PushbulletAPIKey,
-		Realtime:   true,
-		DeviceName: info.BotName,
-	}
-
-	monobullet.Configuration(config)
-	monobullet.Start()
-	return nil
+	pushBot.CommandCallback = handlers.HandleCommand
+	return
 }
 
 func startIrcBot() {
@@ -68,6 +61,9 @@ func startIrcBot() {
 }
 
 func startDiscordBot() {
+	if Settings.DiscordToken == "" {
+		return
+	}
 
 	discordBot, err := connectToDiscord()
 	if err != nil {

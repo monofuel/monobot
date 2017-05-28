@@ -55,10 +55,11 @@ func loadConfig() error {
 		} else {
 			log.Fatalf("error loading config: %s\n", err.Error())
 		}
-	}
+	} else {
 
-	if err = json.Unmarshal(configContents, &Settings); err != nil {
-		fmt.Printf("Error parsing file: %s\n", err.Error())
+		if err = json.Unmarshal(configContents, &Settings); err != nil {
+			fmt.Printf("Error parsing file: %s\n", err.Error())
+		}
 	}
 	/*
 		fmt.Println("configuration:", configuration)
