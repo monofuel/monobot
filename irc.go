@@ -29,13 +29,19 @@ func connectToIrc(server string, channels []string) (*IrcBot, error) {
 		fmt.Printf("%s|%s|%s\n", channel, e.Source, e.Message())
 		if bot.CommandCallback != nil {
 			args := strings.Fields(e.Message())
-			if args[0] == Settings.IrcPrefix {
-				args = args[1:]
+			if args[0] == Settings.IrcPrefix || channel == info.BotName {
+				if args[0] == Settings.IrcPrefix {
+					args = args[1:]
+				}
 				fmt.Println("running command: ", args)
 				response := bot.CommandCallback(args)
 				if response != "" {
 					lines := strings.Split(response, "\n")
-					bot.Privmsg(channel, strings.Join(lines, "\t"))
+					if channel == info.BotName {
+						bot.Privmsg(strings.Split(e.Source, "!")[0], strings.Join(lines, "\t"))
+					} else {
+						bot.Privmsg(channel, strings.Join(lines, "\t"))
+					}
 				}
 			}
 		}

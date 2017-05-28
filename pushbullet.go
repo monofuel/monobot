@@ -39,12 +39,12 @@ func connectToPushbullet() (*PushbulletBot, error) {
 			}
 		}()
 	}(bot)
-	_, err = monobullet.SendPush(&monobullet.Push{
+	/*_, err = monobullet.SendPush(&monobullet.Push{
 		Type:  "note",
 		Title: fmt.Sprintf("%v started", info.BotName),
 	})
 	if err != nil {
 		log.Fatal(err)
-	}
+	}*/
 	return bot, nil
 }
