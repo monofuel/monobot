@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"net"
 	"os"
 	"time"
 
@@ -28,6 +29,13 @@ func Start() {
 		}
 		return fmt.Sprintf("Host: %s\nBotName: %s\nOwner: %s\nPID: %d",
 			info.Hostname, info.BotName, info.Owner, info.PID)
+	})
+	handlers.SetHandler("interfaces", func(args []string) string {
+		interfaces, err := getInterfaces()
+		if err != nil {
+			return fmt.Sprintf("error getting interfaces: %v", err)
+		}
+		return fmt.Sprintf("interfaces: %v\n", interfaces)
 	})
 
 	startIrcBot()
@@ -91,5 +99,33 @@ func getInfo() (*BotInfo, error) {
 	info.PID = os.Getpid()
 	info.BotName = fmt.Sprintf("monobot-%s", info.Hostname)
 	info.Owner = Settings.Owner
+
 	return info, nil
+}
+
+func getInterfaces() ([]string, error) {
+	var Interfaces []string
+	ifaces, err := net.Interfaces()
+	if err != nil {
+		return Interfaces, err
+	}
+	for _, i := range ifaces {
+		addrs, err := i.Addrs()
+		if err != nil {
+			fmt.Printf("error listing addresses: %v\n", err)
+			continue
+		}
+		for _, addr := range addrs {
+			var ip net.IP
+			switch v := addr.(type) {
+			case *net.IPNet:
+				ip = v.IP
+			case *net.IPAddr:
+				ip = v.IP
+			}
+			Interfaces = append(Interfaces, ip.String())
+		}
+	}
+
+	return Interfaces, nil
 }
