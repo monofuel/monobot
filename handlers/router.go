@@ -16,6 +16,8 @@ func init() {
 	commandMap["time"] = getTime
 
 	commandMap["quit"] = quit
+	commandMap["update"] = quit
+	commandMap["version"] = version
 }
 
 //SetHandler manually sets an external handler
@@ -57,4 +59,7 @@ func quit(line []string) string {
 	fmt.Println("ordered to quit")
 	os.Exit(-1)
 	return ""
+}
+func version(line []string) string {
+	return "v5.0"
 }
