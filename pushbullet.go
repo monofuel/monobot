@@ -27,7 +27,7 @@ func connectToPushbullet() (*PushbulletBot, error) {
 	pushConfig := &monobullet.Config{
 		APIKey:     Settings.PushbulletAPIKey,
 		DeviceName: info.BotName,
-		Debug:      true,
+		Debug:      false,
 	}
 	monobullet.Configuration(pushConfig)
 	device, err := monobullet.AddOwnDevice()
