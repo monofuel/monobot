@@ -3,8 +3,8 @@
 monofuel's tweakable bot. Can be either ran on it's own as app/main.go, or included into other go projects. The goal is to be an easy way to add 'bot-like' functionality to projects. The basic abilities are to broadcast a message, and to handle commands.
 
 # easy install
-as root: `curl https://raw.githubusercontent.com/monofuel/monobot/master/install.sh | bash`
-add `@reboot monobot cd /opt/monobot && ./start.sh` to your crontab
+- as root: `curl https://raw.githubusercontent.com/monofuel/monobot/master/install.sh | bash`
+- add `@reboot monobot cd /opt/monobot && ./start.sh` to your crontab
 
 # working
 - irc integration

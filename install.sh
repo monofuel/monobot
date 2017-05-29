@@ -15,11 +15,11 @@ then
 fi
 echo "updating"
 cd /opt/monobot
-wget "$GIT_URL/install.sh" -O install.sh -q
+curl "$GIT_URL/install.sh" > install.sh
 chmod +x install.sh
-wget "$GIT_URL/start.sh" -O start.sh -q
+curl "$GIT_URL/start.sh" > start.sh
 chmod +x start.sh
-wget "$GIT_URL/monobot" -O monobot -q
+curl "$GIT_URL/monobot" > monobot
 chmod +x monobot
 
 if [[ $EUID == 0 ]]
