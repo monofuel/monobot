@@ -15,8 +15,8 @@ then
 fi
 echo "updating"
 cd /opt/monobot
-wget "$GIT_URL/install.sh" -N
-chmod +x install.sh
+wget "$GIT_URL/install.sh" -N -O install.sh.tmp
+chmod +x install.sh.tmp
 wget "$GIT_URL/start.sh" -N
 chmod +x start.sh
 wget "$GIT_URL/monobot" -N
@@ -27,3 +27,4 @@ then
   echo "fixing permissions"
   chown -R monobot /opt/monobot
 fi
+mv install.sh.tmp install.sh
