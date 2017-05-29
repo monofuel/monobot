@@ -6,7 +6,7 @@ do
 
   ./install.sh || true
 
-  ./monobot
+  ./monobot || true
   printf "\nrestarting\n"
   sleep 2s
 done
