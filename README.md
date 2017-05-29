@@ -4,7 +4,7 @@ monofuel's tweakable bot. Can be either ran on it's own as app/main.go, or inclu
 
 # easy install
 - as root: `curl https://raw.githubusercontent.com/monofuel/monobot/master/install.sh | bash`
-- add `@reboot monobot cd /opt/monobot && ./start.sh` to your crontab
+- add `@reboot su monobot -c 'cd /opt/monobot && ./start.sh'` to your crontab
 
 # working
 - irc integration
