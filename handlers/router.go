@@ -61,5 +61,5 @@ func quit(line []string) string {
 	return ""
 }
 func version(line []string) string {
-	return "v5.0"
+	return "v5.2"
 }

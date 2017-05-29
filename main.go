@@ -97,7 +97,11 @@ func getInfo() (*BotInfo, error) {
 	}
 	info.Hostname = hostname
 	info.PID = os.Getpid()
-	info.BotName = fmt.Sprintf("monobot-%s", info.Hostname)
+	if Settings.BotName == "" {
+		info.BotName = fmt.Sprintf("monobot-%s", info.Hostname)
+	} else {
+		info.BotName = Settings.BotName
+	}
 	info.Owner = Settings.Owner
 
 	return info, nil

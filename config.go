@@ -15,6 +15,7 @@ type SettingOptions struct {
 	IrcPrefix        string   `json:"ircPrefix"`
 	DiscordToken     string   `json:"discordToken"`
 	PushbulletAPIKey string   `json:"pushbulletAPIKey"`
+	BotName          string   `json:"botName"`
 }
 
 //ConfigFilename is the name of the configuration file
@@ -22,10 +23,12 @@ var ConfigFilename = "config.json"
 
 //Settings is the object detailing the loaded configuration
 var Settings = &SettingOptions{
-	IrcServers:   []string{"japura.net:6667"},
-	Owner:        "monofuel",
-	IrcPrefix:    "$mono",
-	DiscordToken: "",
+	IrcServers:       []string{"japura.net:6667"},
+	Owner:            "monofuel",
+	IrcPrefix:        "$mono",
+	DiscordToken:     "",
+	PushbulletAPIKey: "",
+	BotName:          "",
 }
 
 func Configuration(s *SettingOptions) {
