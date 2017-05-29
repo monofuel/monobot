@@ -13,6 +13,7 @@ func init() {
 	commandMap["threest"] = toDo
 	commandMap["help"] = help
 	commandMap["ping"] = ping
+	commandMap["time"] = getTime
 
 	commandMap["quit"] = quit
 }
