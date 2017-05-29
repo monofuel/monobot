@@ -3,14 +3,24 @@ set -euo pipefail
 
 GIT_URL="https://raw.githubusercontent.com/monofuel/monobot/master"
 
-if [[ $EUID -e 0 ]]
+if [[ $EUID == 0 ]]
 then
+  echo "setting up project"
   id -u monobot &> /dev/null || useradd monobot
   mkdir -p /opt/monobot/
-  chown -R monobot /opt/monobot
-  su monobot
+elif [[ $USER != "monobot" ]]
+then
+  echo "run this as monobot to update, or as root to install"
+  exit
 fi
-# assuming we are running as monobot
+echo "updating"
 cd /opt/monobot
-wget "$GIT_URL/install.sh"
-wget "$GIT_URL/start.sh"
+wget "$GIT_URL/install.sh" -N -q
+wget "$GIT_URL/start.sh" -N -q
+wget "$GIT_URL/monobot" -N -q
+
+if [[ $EUID == 0 ]]
+then
+  echo "fixing permissions"
+  chown -R monobot /opt/monobot
+fi
