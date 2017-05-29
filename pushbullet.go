@@ -27,7 +27,7 @@ func connectToPushbullet() (*PushbulletBot, error) {
 	pushConfig := &monobullet.Config{
 		APIKey:     Settings.PushbulletAPIKey,
 		DeviceName: info.BotName,
-		Debug:      false,
+		Debug:      true,
 	}
 	monobullet.Configuration(pushConfig)
 	device, err := monobullet.AddOwnDevice()
@@ -41,10 +41,16 @@ func connectToPushbullet() (*PushbulletBot, error) {
 	go func() {
 		for {
 			note := <-monobullet.PushChannel
-			if note.TargetDeviceIden == bot.Device.Iden && bot.CommandCallback != nil && note.SourceDeviceIden != bot.Device.Iden {
+			if (note.TargetDeviceIden == bot.Device.Iden ||
+				note.TargetDeviceIden == "") &&
+				bot.CommandCallback != nil &&
+				note.SourceDeviceIden != bot.Device.Iden {
 				fmt.Printf("note was to bot, running command\n")
 				args := strings.Split(note.Body, " ")
 				resp := bot.CommandCallback(args)
+				if resp == "no such command" {
+					continue
+				}
 				if resp != "" {
 					monobullet.SendPush(&monobullet.Push{
 						Type:             "note",
